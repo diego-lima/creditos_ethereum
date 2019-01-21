@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-contract Blockchain {
+contract Creditos {
     // Registra quando uma pessoa compra crédito: quem comprou, quantos créditos comprou, e quanto pagou por cada
     event Credito(address indexed usuario, uint value, uint256 preco);
     // Registra um gasto de crédito: quem gastou, quem foi responsável por debitar, quanto foi debitado

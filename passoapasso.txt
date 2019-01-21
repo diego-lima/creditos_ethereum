@@ -1,0 +1,68 @@
+a = contract.consultarSaldo(eth.coinbase)
+b = contract.setarSaldo(eth.coinbase, 55)
+c = contract.setarOficial(eth.coinbase, true)
+d = contract.setarPreco(1)
+e = contract.consultarPreco()
+f = contract.comprarSaldo.call.value(eth.getBalance(eth.coinbase) / 20)()
+g = 3
+h = web3.eth.sendTransaction({from:eth.coinbase,to:contract.address, value:web3.toWei(g, "ether")})
+i = contract.consultarTotalRecebido()
+
+
+//
+// recuperar o contrato
+//
+
+
+
+
+//
+// PARA COMPRAR
+//
+d = contract.setarPreco(web3.toWei(1, "ether")) // setar o preco igual a 1 ether
+a = contract.consultarSaldo(eth.coinbase) // verificar meu saldo
+web3.fromWei(eth.getBalance(eth.coinbase)) // verificar minha carteira
+
+// mandar 3 ether para o contrato
+h = web3.eth.sendTransaction({from:eth.coinbase,to:contract.address, value:web3.toWei(3, "ether")})
+a = contract.consultarSaldo(eth.coinbase) // verificar meu saldo
+web3.fromWei(eth.getBalance(eth.coinbase)) // verificar minha carteira
+j = contract.debitar(eth.coinbase, 1) // debitar do saldo
+
+
+//
+// PARA DEBITAR (PYTHON)
+//
+
+// configurar conexão ao node
+
+from json import loads
+from web3 import Web3
+ipc_path = "/home/diego/projetos/ethereum/redeprivada/geth.ipc"
+my_provider = Web3.IPCProvider(ipc_path)
+w3 = Web3(my_provider)
+
+// configurar conta
+
+recepcao = '0x39eE1AaDa22070410068749e398F2e29128Dda79'
+w3.personal.unlockAccount(recepcao, "recepcao")
+
+// configurar contrato
+
+abi = open("/home/diego/projetos/ferias2018.2/blockchain/Blockchain.abi", "r").read()
+addr = "0xbcd0cc1ab94d632780ef5e4bcb03038b396f7668"
+
+contrato = w3.eth.contract(
+    address=w3.toChecksumAddress(addr),
+    abi=loads(abi),
+)
+
+// ver saldo
+
+dono = '0x8B1223141C073f698411d34Ad1725daFBef1933d'
+contrato.functions.consultarSaldo(dono).call()
+
+// debitar
+
+contrato.transact({"from":dono, "gas":480000}).debitar(dono,1)
+
